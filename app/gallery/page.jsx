@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiChevronLeft, FiChevronRight, FiImage, FiCamera, FiHeart } from 'react-icons/fi';
 
@@ -91,6 +91,12 @@ export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Fix for window is not defined
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const filteredImages = selectedCategory === 'all'
     ? galleryImages
@@ -118,16 +124,18 @@ export default function GalleryPage() {
   };
 
   // Keyboard navigation
-  useState(() => {
+  useEffect(() => {
+    if (!isMounted || !selectedImage) return;
+    
     const handleKeyDown = (e) => {
-      if (!selectedImage) return;
       if (e.key === 'ArrowRight') nextImage();
       if (e.key === 'ArrowLeft') prevImage();
       if (e.key === 'Escape') closeLightbox();
     };
+    
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedImage, currentIndex]);
+  }, [isMounted, selectedImage, currentIndex]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -145,14 +153,21 @@ export default function GalleryPage() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
   };
 
-  const categoryCounts = categories.reduce((acc, cat) => {
-    acc[cat.id] = cat.count;
-    return acc;
-  }, {});
+  // Loading state
+  if (!isMounted) {
+    return (
+      <div className="pt-20 pb-16 flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading gallery...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-20 pb-16 bg-gradient-to-b from-white to-orange-50/30">
-      {/* Hero Section with Parallax */}
+      {/* Hero Section */}
       <div className="relative h-64 md:h-80 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-700 to-red-700">
           <div className="absolute inset-0 bg-black/30" />
@@ -194,7 +209,7 @@ export default function GalleryPage() {
       </div>
 
       <div className="container-custom py-12">
-        {/* Category Filter with Icons */}
+        {/* Category Filter */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -224,7 +239,7 @@ export default function GalleryPage() {
           ))}
         </motion.div>
 
-        {/* Gallery Grid with Staggered Animation */}
+        {/* Gallery Grid */}
         {filteredImages.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
@@ -249,7 +264,6 @@ export default function GalleryPage() {
                 onClick={() => openLightbox(image, index)}
                 className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
               >
-                {/* Image Container with Overlay */}
                 <div className="relative overflow-hidden h-64">
                   <img
                     src={image.src}
@@ -258,31 +272,26 @@ export default function GalleryPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                   
-                  {/* Category Badge */}
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs rounded-full shadow-md">
                       {image.category}
                     </span>
                   </div>
                   
-                  {/* Date Badge */}
                   <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm rounded-full px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <span className="text-white text-xs">{image.date}</span>
                   </div>
 
-                  {/* Hover Content */}
                   <div className="absolute bottom-0 left-0 right-0 p-5 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-400">
                     <h3 className="text-xl font-bold mb-1">{image.title}</h3>
                     <p className="text-sm text-gray-200 line-clamp-2">{image.description}</p>
                   </div>
                 </div>
                 
-                {/* Footer */}
                 <div className="p-3 bg-white">
                   <p className="text-sm text-gray-600 text-center font-medium">{image.title}</p>
                 </div>
 
-                {/* Animated Bottom Border */}
                 <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-orange-500 to-red-500 group-hover:w-full transition-all duration-500" />
               </motion.div>
             ))}
@@ -306,16 +315,11 @@ export default function GalleryPage() {
               <span className="text-3xl font-bold text-orange-600">{categories.length - 1}</span>
               <p className="text-gray-500 text-sm">Event Types</p>
             </div>
-            <div className="w-px h-8 bg-gray-300" />
-            <div>
-              <span className="text-3xl font-bold text-orange-600">15+</span>
-              <p className="text-gray-500 text-sm">Years of Memories</p>
-            </div>
           </div>
         </motion.div>
       </div>
 
-      {/* Premium Lightbox Modal */}
+      {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
@@ -325,7 +329,6 @@ export default function GalleryPage() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm"
             onClick={closeLightbox}
           >
-            {/* Close Button */}
             <button
               onClick={closeLightbox}
               className="absolute top-5 right-5 z-10 p-2 bg-white/20 rounded-full text-white hover:bg-white/30 hover:scale-110 transition-all duration-300"
@@ -333,7 +336,6 @@ export default function GalleryPage() {
               <FiX className="w-6 h-6" />
             </button>
 
-            {/* Navigation Buttons */}
             <button
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
               className="absolute left-5 z-10 p-3 bg-white/20 rounded-full text-white hover:bg-white/30 hover:scale-110 transition-all duration-300"
@@ -347,7 +349,6 @@ export default function GalleryPage() {
               <FiChevronRight className="w-6 h-6" />
             </button>
 
-            {/* Image with Animation */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -362,7 +363,6 @@ export default function GalleryPage() {
                 className="w-full h-full object-contain rounded-2xl shadow-2xl"
               />
               
-              {/* Image Info Panel */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 rounded-b-2xl">
                 <h3 className="text-white text-2xl md:text-3xl font-bold mb-2">{selectedImage.title}</h3>
                 <p className="text-gray-300 text-sm md:text-base mb-2">{selectedImage.description}</p>
@@ -375,7 +375,6 @@ export default function GalleryPage() {
               </div>
             </motion.div>
 
-            {/* Image Counter */}
             <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-sm rounded-full px-4 py-1.5">
               <span className="text-white text-sm">
                 {currentIndex + 1} / {filteredImages.length}
