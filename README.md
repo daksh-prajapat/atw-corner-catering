@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🍽️ ATW-Corner Catering Website
 
-## Getting Started
+## 📌 Live Demo
+🔗 [View Website](https://atw-corner-catering.vercel.app) *(Deploy karne ke baad link daal dena)*
 
-First, run the development server:
+## 📖 About
+**ATW-Corner** is a premium **pure vegetarian catering service** based in Delhi, serving across India. This website showcases our services, menu, gallery, and allows customers to book catering services for weddings, corporate events, birthday parties, engagements, and anniversaries.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
+- 🎯 **Fully Responsive Design** - Works on all devices
+- 🌙 **Light Theme** - Clean & professional look
+- 🍛 **100% Pure Veg Menu** - Wedding special dishes
+- 📸 **Image Gallery** - Event photos showcase
+- 📞 **WhatsApp Integration** - Direct booking via WhatsApp
+- 📧 **Contact Form** - Easy inquiry submission
+- 🎨 **Modern UI** - Smooth animations & hover effects
+- 🚀 **Fast Loading** - Optimized performance
+- 🔍 **Search & Filter** - Easy menu navigation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
+| Technology | Purpose |
+|------------|---------|
+| **Next.js 14** | React Framework |
+| **Tailwind CSS** | Styling & UI |
+| **Framer Motion** | Animations |
+| **React Icons** | Icons |
+| **Vercel** | Deployment |
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📂 Project Structure
